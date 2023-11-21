@@ -13,7 +13,7 @@ class Warrior(Character):
 
     def _apply_critical_strike(self, base_damages: int):
         if random.random() < 0.3:
-            malus = random.randit(1, 5)
+            malus = random.randint(1, 5)
             print (f"💔 Critical Strike ! {malus} damages")
             return base_damages - malus 
         else : 
@@ -31,7 +31,7 @@ class Warrior(Character):
             return 0 
 
     def compute_damages(self, roll, target: Character):
-        print (f"🪓 Bonus: Axe in your face(+3 attack)")
+        print (f"🪓 Bonus: Axe in your face (+3 attack)")
         base_damages = super().compute_damages(roll, target) + 3 
 
         damages_after_critical = self._apply_critical_strike(base_damages)
