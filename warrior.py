@@ -12,7 +12,7 @@ class Warrior(Character):
         print (f"🪓 Basic Attack: {base_damages + target.get_defense_value()} damages")
 
     def _apply_critical_strike(self, base_damages: int):
-        if random.random() < 0,3:
+        if random.random() < 0.3:
             malus = random.randit(1, 5)
             print (f"💔 Critical Strike ! {malus} damages")
             return base_damages - malus 
