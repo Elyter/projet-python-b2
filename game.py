@@ -75,14 +75,14 @@ class Game:
     def run_turn(self):        
         # Player 1's turn
         attack_choice_p1 = self.choose_attack(self._player1)
-        self._player1.attack(self._player2, attack_choice_p1)
+        self._player1.attack(self._player2)
         if not self._player2.is_alive():
             print(f"{self._player1.get_name()} wins!")
             return
 
         # Player 2's turn
         attack_choice_p2 = self.choose_attack(self._player2)
-        self._player2.attack(self._player1, attack_choice_p2)
+        self._player2.attack(self._player1)
         if not self._player1.is_alive():
             print(f"{self._player2.get_name()} wins!")
             return
