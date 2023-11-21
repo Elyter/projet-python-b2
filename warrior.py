@@ -1,51 +1,45 @@
 import random
 from character import Character
-from dice import Dice 
-from character import Thief
+from dice import Dice
 
 class Warrior(Character):
     def __init__(self, name: str, max_hp: int, attack: int, defense: int, dice: Dice):
         super().__init__(name, max_hp, attack, defense, dice)
-        self._shields = 3
+        self._potions = 3
 
-    def _apply_attack_modifiers(self, base_damages: int, target: Character):
-        print (f"🪓 Basic Attack: {base_damages + target.get_defense_value()} damages")
+    def _apply_critical_strike(self, base_damages: int, roll):
+        # Attaque avec un pourcentage de chance d'avoir un malus
+        if random.random() < 0.3:  # 30% de chance d'avoir un malus
+            bonus = random.randint(1, 5)  # Valeur aléatoire de malus entre 1 et 5
+            print(f"💔 Critical Strike! {base_damages + bonus} Damages (+{bonus} bonus damages + {self._attack_value} damages + {roll} roll)\n")
+            return base_damages + bonus
+        else:
+            print(f"💔 Critical Strike Failed! {base_damages - 3} Damages (-3 damages + {self._attack_value} damages + {roll} roll)\n")
+            return base_damages - 3
 
-    def _apply_critical_strike(self, base_damages: int):
-        if random.random() < 0.3:
-            malus = random.randint(1, 5)
-            print (f"💔 Critical Strike ! {malus} damages")
-            return base_damages - malus 
-        else : 
-            print ("💔 Critical Strike Failed !")
-            return base_damages 
-        
-    def _apply_shield(self):
-        if self._shields > 0:
-            self._shields -= 1
-            shield_bonus = random.randint(5, 10) 
-            print (f"🛡️ Used shield ! + {shield_bonus} defense")
-            return shield_bonus 
-        else : 
-            print (f"🛡️ Out of shields ! Normal Defense")
-            return 0 
+    def _apply_heal(self):
+        # Attaque avec l'utilisation d'une shield
+        if self._potions > 0:
+            self._potions -= 1
+            heal_bonus = random.randint(5, 10)  # Valeur aléatoire de bonus de shield entre 5 et 10
+            print(f"🧪 Used Heal! +{heal_bonus} HP")
+            print(f"🧪 {self._potions} potions left")
+            self.heal(heal_bonus)
+            print(f"🧪 {self.show_healthbar()}")
 
-    def compute_damages(self, roll, target: Character):
-        print (f"🪓 Bonus: Axe in your face (+3 attack)")
-        base_damages = super().compute_damages(roll, target) + 3 
+    def _get_potions(self):
+        return self._potions
 
-        damages_after_critical = self._apply_critical_strike(base_damages)
-
-        final_damages = damages_after_critical + self._apply_shield()
-
-        return final_damages
-
-if __name__ == "__main__":
-    character1 = Thief("Lisa", 20, 8, 3, Dice(6))
-    character2 = Warrior("Salim", 20, 8, 3, Dice(6))
-    print(character1)
-    print(character2)
-
-    while character1.is_alive() and character2.is_alive():
-        character1.attack(character2)
-        character2.attack(character1)
+    def show_healthbar(self):
+        return super().show_healthbar() + f" ({self._get_potions()} potions)"
+            
+    def compute_damages(self, roll, target: Character, attack_type):
+        base_damages = self._attack_value + roll
+        if attack_type == 1:
+            print(f"🔪 Basic Attack: {base_damages} damages ({self._attack_value} damages + {roll} roll)\n")
+        elif attack_type == 2:
+            base_damages = self._apply_critical_strike(base_damages, roll)
+        elif attack_type == 3:
+            self._apply_heal()
+            return 0
+        return base_damages

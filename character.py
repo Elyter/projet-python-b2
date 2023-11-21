@@ -35,27 +35,29 @@ class Character:
     def show_healthbar(self):
         missing_hp = self._max_hp - self._current_hp
         healthbar = f"[{"♥" * self._current_hp}{"♡" * missing_hp}] {self._current_hp}/{self._max_hp}hp"
-        print(healthbar)
+        return healthbar
 
     def regenerate(self):
         self._current_hp = self._max_hp
+
+    def heal(self, amount):
+        self._current_hp += amount
+        if self._current_hp > self._max_hp:
+            self._current_hp = self._max_hp
 
     def decrease_health(self, amount):
         self._current_hp -= amount
         if self._current_hp < 0:
             self._current_hp = 0
-        self.show_healthbar()
-        
-    def compute_damages(self, roll, target):
-        return self._attack_value + roll
-        
-    def attack(self, target: Character):
+        print(f"{self._name} : {self.show_healthbar()}\n")
+
+    def attack(self, target: Character, attack_type):
         if not self.is_alive():
             return
         roll = self._dice.roll()
-        damages = self.compute_damages(roll, target)
-        print(f"⚔️ {self._name} attack {target.get_name()} with {damages} damages (attack: {self._attack_value} + roll: {roll})")
-        target.defense(damages, self)
+        damages = self.compute_damages(roll, target, attack_type)
+        if damages > 0:
+            target.defense(damages, self)
     
     def compute_defense(self, damages, roll, attacker):
         return damages - self._defense_value - roll
@@ -63,24 +65,15 @@ class Character:
     def defense(self, damages, attacker: Character):
         roll = self._dice.roll()
         wounds = self.compute_defense(damages, roll, attacker)
-        print(f"🛡️ {self._name} take {wounds} wounds from {attacker.get_name()} (damages: {damages} - defense: {self._defense_value} - roll: {roll})")
+        if wounds < 0:
+            wounds = 0
+        print(f"🛡️ {self._name} take {wounds} wounds from {attacker.get_name()} (damages: {damages} - defense: {self._defense_value} - roll: {roll})\n")
         self.decrease_health(wounds)
-
-class Warrior(Character):
-    def compute_damages(self, roll, target: Character):
-        print("🪓 Bonus: Axe in your face (+3 attack)")
-        return super().compute_damages(roll, target) + 3 
 
 class Mage(Character):
     def compute_defense(self, damages, roll, attacker: Character):
         print("🧙 Bonus: Magic armor (-3 damages)")
         return super().compute_defense(damages, roll, attacker) - 3
-
-class Thief(Character):
-    def compute_damages(self, roll, target: Character):
-        print(f"🔪 Bonus: Sneacky attack (+{target.get_defense_value()} damages)")
-        return super().compute_damages(roll, target) + target.get_defense_value()
-
 
 if __name__ == "__main__":
     character1 = Warrior("Salim", 20, 8, 3, Dice(6))
