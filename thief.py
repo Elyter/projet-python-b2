@@ -6,7 +6,7 @@ from character import Warrior
 class Thief(Character):
     def __init__(self, name: str, max_hp: int, attack: int, defense: int, dice: Dice):
         super().__init__(name, max_hp, attack, defense, dice)
-        self._potions = 3
+        self._shields = 3
 
     def _apply_attack_modifiers(self, base_damages: int, target: Character):
         # Attaque de base avec bonus de défense de la cible
@@ -22,15 +22,15 @@ class Thief(Character):
             print("💔 Critical Strike Failed!")
             return base_damages
 
-    def _apply_potion(self):
-        # Attaque avec l'utilisation d'une potion
-        if self._potions > 0:
-            self._potions -= 1
-            potion_bonus = random.randint(5, 10)  # Valeur aléatoire de bonus de potion entre 5 et 10
-            print(f"🧪 Used Potion! +{potion_bonus} damages")
-            return potion_bonus
+    def _apply_shield(self):
+        # Attaque avec l'utilisation d'une shield
+        if self._shields > 0:
+            self._shields -= 1
+            shield_bonus = random.randint(5, 10)  # Valeur aléatoire de bonus de shield entre 5 et 10
+            print(f"🧪 Used shield! +{shield_bonus} damages")
+            return shield_bonus
         else:
-            print("🧪 Out of Potions! Normal Attack")
+            print("🧪 Out of shields! Normal Attack")
             return 0
 
     def compute_damages(self, roll, target: Character):
@@ -40,8 +40,8 @@ class Thief(Character):
         # Appliquer un coup critique avec un malus potentiel
         damages_after_critical = self._apply_critical_strike(base_damages)
 
-        # Appliquer l'utilisation éventuelle d'une potion
-        final_damages = damages_after_critical + self._apply_potion()
+        # Appliquer l'utilisation éventuelle d'une shield
+        final_damages = damages_after_critical + self._apply_shield()
 
         return final_damages
 

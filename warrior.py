@@ -6,7 +6,7 @@ from character import Thief
 class Warrior(Character):
     def __init__(self, name: str, max_hp: int, attack: int, defense: int, dice: Dice):
         super().__init__(name, max_hp, attack, defense, dice)
-        self._potions = 3
+        self._shields = 3
 
     def _apply_attack_modifiers(self, base_damages: int, target: Character):
         print (f"🪓 Basic Attack: {base_damages + target.get_defense_value()} damages")
@@ -20,23 +20,23 @@ class Warrior(Character):
             print ("💔 Critical Strike Failed !")
             return base_damages 
         
-    def _apply_potion(self):
-        if self._potions > 0:
-            self._potion -= 1
-            potion_bonus = random.randint(5, 10) 
-            print (f"🧪 Used Potion ! + {potion_bonus} damages")
-            return potion_bonus 
+    def _apply_shield(self):
+        if self._shields > 0:
+            self._shields -= 1
+            shield_bonus = random.randint(5, 10) 
+            print (f"🛡️ Used shield ! + {shield_bonus} defense")
+            return shield_bonus 
         else : 
-            print (f"🧪 Out of Potions ! Normal Attack")
+            print (f"🛡️ Out of shields ! Normal Defense")
             return 0 
 
     def compute_damages(self, roll, target: Character):
-        print (f"🪓 Bonus : Sneaky Attack (+{target.get_defense_value()} damages)")
-        base_damages = super().compute_damages(roll, target) + target.get_defense_value()
+        print (f"🪓 Bonus: Axe in your face(+3 attack)")
+        base_damages = super().compute_damages(roll, target) + 3 
 
         damages_after_critical = self._apply_critical_strike(base_damages)
 
-        final_damages = damages_after_critical + self._apply_potion()
+        final_damages = damages_after_critical + self._apply_shield()
 
         return final_damages
 
@@ -49,4 +49,3 @@ if __name__ == "__main__":
     while character1.is_alive() and character2.is_alive():
         character1.attack(character2)
         character2.attack(character1)
-
