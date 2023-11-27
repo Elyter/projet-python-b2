@@ -108,7 +108,10 @@ class Game:
         attack_choice_p1 = self.choose_attack(self._player1)
         print("\n")
         self._player1.attack(self._player2, attack_choice_p1)
-        self.show_healthbar(self._player2)
+        if (attack_choice_p1 == 3):
+            self.show_healthbar(self._player1)
+        else:
+            self.show_healthbar(self._player2)
         print("\n")
         if not self._player2.is_alive():
             self.display_victory_animation(self._player1.get_name())
@@ -117,7 +120,10 @@ class Game:
         # Player 2's turn
         attack_choice_p2 = self.choose_attack(self._player2)
         self._player2.attack(self._player1, attack_choice_p2)
-        self.show_healthbar(self._player1)
+        if (attack_choice_p2 == 3):
+            self.show_healthbar(self._player2)
+        else:
+            self.show_healthbar(self._player1)
         if not self._player1.is_alive():
             self.display_victory_animation(self._player2.get_name())
             return

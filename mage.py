@@ -12,7 +12,7 @@ class Mage(Character):
     def _apply_critical_strike(self):
         # Spell with a chance to cause burning effect
         if random.random() < 0.7:  # 70% chance of burning effect
-            base_damages = random.randint(5, 9)  # Random burning damage between 5 and 9
+            base_damages = random.randint(10, 20)  # Random burning damage between 5 and 9
             print(f"🔥 Fireball! {base_damages} burning damages")
             return base_damages
         else:
@@ -40,7 +40,7 @@ class Mage(Character):
             heal_bonus = random.randint(5, 10)  # Valeur aléatoire de bonus de shield entre 5 et 10
             print(f"🧪 Used Heal! +{heal_bonus} HP")
             print(f"🧪 {self._potions} potions left")
-            self.heal(heal_bonus)            
+            self.heal(heal_bonus)
 
     def _apply_shield(self):
         # Attaque avec l'utilisation d'une shield

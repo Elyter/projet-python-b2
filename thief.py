@@ -12,17 +12,23 @@ class Thief(Character):
 
     def _apply_critical_strike(self, base_damages: int, roll, target: Character):
         # Attaque avec un pourcentage de chance d'avoir un malus
-        if random.random() < 0.3:  # 40% de chance d'avoir un malus
-            bonus = random.randint(1, 5)  # Valeur aléatoire de malus entre 1 et 5
-            print(f"💔 Critical Strike! {base_damages + bonus} Damages (+{bonus} bonus damages + {self._attack_value} damages + {roll} roll)\n")
+        if random.random() < 0.3:  # 40% de chance d'avoir un malus 
+            print(f"🔪 Basic Attack: {base_damages} damages ({self._attack_value} damages + {roll} roll)\n")
             target.decrease_potions()
-            self._increase_potions()
-            print(f"🧪 Steal potion ! \n")
-            print(f"🧪 {target.get_name()} has {target.get_potions()} potions left \n")
-            return base_damages + bonus
+            if target.get_potions() > 0:
+                print(f"🧪 Steal potion ! \n")
+                self._increase_potions()
+                print(f"🧪 {target.get_name()} has {target.get_potions()} potions left \n")
+            else:
+                print(f"🧪 {target.get_name()} has no more potions \n")
+                bonus = random.randint(1, 5)  # Valeur aléatoire de malus entre 1 et 5
+                print(f"💔 Critical Strike! {base_damages + bonus} Damages (+{bonus} bonus damages + {self._attack_value} damages + {roll} roll)\n")
+                return base_damages + bonus
+            return base_damages
         else:
-            print(f"💔 Critical Strike Failed! {base_damages - 3} Damages (-3 damages + {self._attack_value} damages + {roll} roll)\n")
-            return base_damages - 3
+            malus = random.randint(1, 5)  # Valeur aléatoire de malus entre 1 et 5
+            print(f"💔 Critical Strike Failed! {base_damages - malus} Damages (-{malus} damages + {self._attack_value} damages + {roll} roll)\n")
+            return base_damages - malus
 
     def _apply_heal(self):
         # Attaque avec l'utilisation d'une shield

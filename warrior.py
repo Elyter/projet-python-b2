@@ -9,13 +9,14 @@ class Warrior(Character):
 
     def _apply_critical_strike(self, base_damages: int, roll):
         # Attaque avec un pourcentage de chance d'avoir un malus
-        if random.random() < 0.3:  # 30% de chance d'avoir un malus
+        if random.random() < 0.6:  # 30% de chance d'avoir un malus
             bonus = random.randint(1, 5)  # Valeur aléatoire de malus entre 1 et 5
             print(f"💔 Critical Strike! {base_damages + bonus} Damages (+{bonus} bonus damages + {self._attack_value} damages + {roll} roll)\n")
             return base_damages + bonus
         else:
-            print(f"💔 Critical Strike Failed! {base_damages - 3} Damages (-3 damages + {self._attack_value} damages + {roll} roll)\n")
-            return base_damages - 3
+            malus = random.randint(1, 5)  # Valeur aléatoire de malus entre 1 et 5
+            print(f"💔 Critical Strike Failed! {base_damages - malus} Damages (-{malus} damages + {self._attack_value} damages + {roll} roll)\n")
+            return base_damages - malus
 
     def _apply_heal(self):
         # Attaque avec l'utilisation d'une shield
