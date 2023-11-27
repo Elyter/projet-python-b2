@@ -32,11 +32,6 @@ class Character:
     def is_alive(self):
         return self._current_hp > 0       
 
-    def show_healthbar(self):
-        missing_hp = self._max_hp - self._current_hp
-        healthbar = f"[{"♥" * self._current_hp}{"♡" * missing_hp}] {self._current_hp}/{self._max_hp}hp"
-        return healthbar
-
     def regenerate(self):
         self._current_hp = self._max_hp
 
