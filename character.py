@@ -32,6 +32,10 @@ class Character:
 
     def get_potions(self):
         return self._potions
+
+    def decrease_potions(self):
+        if self._potions > 0:
+            self._potions -= 1
         
     def is_alive(self):
         return self._current_hp > 0       

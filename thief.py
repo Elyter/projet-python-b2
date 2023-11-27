@@ -7,11 +7,18 @@ class Thief(Character):
         super().__init__(name, max_hp, attack, defense, dice)
         self._potions = 3
 
-    def _apply_critical_strike(self, base_damages: int, roll):
+    def _increase_potions(self):
+        self._potions += 1
+
+    def _apply_critical_strike(self, base_damages: int, roll, target: Character):
         # Attaque avec un pourcentage de chance d'avoir un malus
-        if random.random() < 0.4:  # 40% de chance d'avoir un malus
+        if random.random() < 0.3:  # 40% de chance d'avoir un malus
             bonus = random.randint(1, 5)  # Valeur aléatoire de malus entre 1 et 5
             print(f"💔 Critical Strike! {base_damages + bonus} Damages (+{bonus} bonus damages + {self._attack_value} damages + {roll} roll)\n")
+            target.decrease_potions()
+            self._increase_potions()
+            print(f"🧪 Steal potion ! \n")
+            print(f"🧪 {target.get_name()} has {target.get_potions()} potions left \n")
             return base_damages + bonus
         else:
             print(f"💔 Critical Strike Failed! {base_damages - 3} Damages (-3 damages + {self._attack_value} damages + {roll} roll)\n")
@@ -21,7 +28,7 @@ class Thief(Character):
         # Attaque avec l'utilisation d'une shield
         if self._potions > 0:
             self._potions -= 1
-            heal_bonus = random.randint(5, 10)  # Valeur aléatoire de bonus de shield entre 5 et 10
+            heal_bonus = random.randint(1, 5)  # Valeur aléatoire de bonus de shield entre 5 et 10
             print(f"🧪 Used Heal! +{heal_bonus} HP")
             print(f"🧪 {self._potions} potions left")
             self.heal(heal_bonus)
@@ -31,7 +38,7 @@ class Thief(Character):
         if attack_type == 1:
             print(f"🔪 Basic Attack: {base_damages} damages ({self._attack_value} damages + {roll} roll)\n")
         elif attack_type == 2:
-            base_damages = self._apply_critical_strike(base_damages, roll)
+            base_damages = self._apply_critical_strike(base_damages, roll, target)
         elif attack_type == 3:
             self._apply_heal()
             return 0
