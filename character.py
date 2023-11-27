@@ -44,7 +44,6 @@ class Character:
         self._current_hp -= amount
         if self._current_hp < 0:
             self._current_hp = 0
-        print(f"{self._name} : {self.show_healthbar()}\n")
 
     def attack(self, target: Character, attack_type):
         if not self.is_alive():
