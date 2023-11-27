@@ -69,7 +69,7 @@ class Game:
             console.print(healthbar, style="bold red"  ,end="\r")
             sleep(0.025)
         console.print("\n")
-        console.print(f" ({player._get_potions()} potions)", style="green")
+        console.print(f" ({player.get_potions()} potions)", style="green")
 
     def choose_attack(self, player: Character):
         console.print(f"{player.get_name()}'s turn.", style="bold", justify="center")
@@ -78,7 +78,7 @@ class Game:
         console.print("[bold bright_red]3.[/] Use Potion \n", style="green")
 
         choice = input("Enter the number of your choice: ")
-        if choice == "3" and player._get_potions() == 0:
+        if choice == "3" and player.get_potions() == 0:
             console.print("You don't have any potions left!", style="bold red", justify="center")
             return self.choose_attack(player)
 

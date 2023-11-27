@@ -25,9 +25,6 @@ class Warrior(Character):
             print(f"🧪 Used Heal! +{heal_bonus} HP")
             print(f"🧪 {self._potions} potions left")
             self.heal(heal_bonus)
-
-    def _get_potions(self):
-        return self._potions
             
     def compute_damages(self, roll, target: Character, attack_type):
         base_damages = self._attack_value + roll

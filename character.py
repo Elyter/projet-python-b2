@@ -17,6 +17,7 @@ class Character:
         self._attack_value = attack
         self._defense_value = defense
         self._dice = dice
+        self._potions = 3
 
     def __str__(self):
         return f"""{self._name} the Character enter the arena with :
@@ -28,6 +29,9 @@ class Character:
         
     def get_name(self):
         return self._name
+
+    def get_potions(self):
+        return self._potions
         
     def is_alive(self):
         return self._current_hp > 0       
