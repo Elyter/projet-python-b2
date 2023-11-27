@@ -40,9 +40,7 @@ class Mage(Character):
             heal_bonus = random.randint(5, 10)  # Valeur aléatoire de bonus de shield entre 5 et 10
             print(f"🧪 Used Heal! +{heal_bonus} HP")
             print(f"🧪 {self._potions} potions left")
-            self.heal(heal_bonus)
-            print(f"🧪 {self.show_healthbar()}")
-            
+            self.heal(heal_bonus)            
 
     def _apply_shield(self):
         # Attaque avec l'utilisation d'une shield

@@ -1,7 +1,6 @@
 import random
 from character import Character
 from dice import Dice
-from character import Warrior
 
 class Thief(Character):
     def __init__(self, name: str, max_hp: int, attack: int, defense: int, dice: Dice):

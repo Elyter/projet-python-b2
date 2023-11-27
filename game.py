@@ -1,8 +1,9 @@
-from character import Character, Mage
+from character import Character
 from dice import Dice
 from rich.console import Console, Theme
 from thief import Thief
 from warrior import Warrior
+from mage import Mage
 from time import sleep
 
 theme = Theme({

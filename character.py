@@ -68,10 +68,6 @@ class Character:
         print(f"🛡️ {self._name} take {wounds} wounds from {attacker.get_name()} (damages: {damages} - defense: {self._defense_value} - roll: {roll})\n")
         self.decrease_health(wounds)
 
-class Mage(Character):
-    def compute_defense(self, damages, roll, attacker: Character):
-        print("🧙 Bonus: Magic armor (-3 damages)")
-        return super().compute_defense(damages, roll, attacker) - 3
 
 if __name__ == "__main__":
     character1 = Warrior("Salim", 20, 8, 3, Dice(6))
