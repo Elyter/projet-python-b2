@@ -21,11 +21,10 @@ class Thief(Character):
         # Attaque avec l'utilisation d'une shield
         if self._potions > 0:
             self._potions -= 1
-            heal_bonus = random.randint(7, 10)  # Valeur aléatoire de bonus de shield entre 7 et 10
+            heal_bonus = random.randint(5, 10)  # Valeur aléatoire de bonus de shield entre 5 et 10
             print(f"🧪 Used Heal! +{heal_bonus} HP")
             print(f"🧪 {self._potions} potions left")
             self.heal(heal_bonus)
-            print(f"🧪 {self.show_healthbar()}")
             
     def compute_damages(self, roll, target: Character, attack_type):
         base_damages = self._attack_value + roll
