@@ -37,11 +37,15 @@ class Game:
         console.clear()
 
         if choice == "1":
-            return Warrior(name, 20, 8, 3, Dice(6))
+            # Guerrier
+            return Warrior(name, max_hp=60, attack=8, defense=4, dice=Dice(6))
         elif choice == "2":
-            return Mage(name, 20, 8, 3, Dice(6))
+            # Mage
+            return Mage(name, max_hp=40, attack=12, defense=3, dice=Dice(6))
         elif choice == "3":
-            return Thief(name, 20, 8, 3, Dice(6))
+            # Voleur
+            return Thief(name, max_hp=45, attack=10, defense=5, dice=Dice(6))
+
 
     def initialize_players(self):
         console.print("Player 1, choose your character.", style="bold red", justify="center")
