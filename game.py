@@ -1,9 +1,17 @@
 from character import Character, Mage
 from dice import Dice
-from rich.console import Console
+from rich.console import Console, Theme
 from thief import Thief
 from warrior import Warrior
-console = Console(width=100)
+from time import sleep
+
+theme = Theme({
+    "info": "bold green",
+    "warning": "bold yellow",
+    "danger": "bold red",
+})
+
+console = Console(width=100, theme=theme, highlight=False)
 
 class Game:
     def __init__(self):
@@ -28,7 +36,7 @@ class Game:
         console.clear()
 
         if choice == "1":
-            return Warrior(name, 20, 8, 3, Dice(6))
+            return Warrior(name, 2, 8, 3, Dice(6))
         elif choice == "2":
             return Mage(name, 20, 8, 3, Dice(6))
         elif choice == "3":
@@ -48,10 +56,15 @@ class Game:
         console.print("Current Status", style="bold", justify="center")
         console.print("---------------", style="bold", justify="center")
         console.print(f"{self._player1.get_name()}:")
-        console.print(self._player1.show_healthbar())
+        console.print(self.show_healthbar(self._player1))
         console.print("\n")
         console.print(f"{self._player2.get_name()}:")
-        console.print(self._player2.show_healthbar())
+        console.print(self.show_healthbar(self._player2))
+
+    def show_healthbar(self, player: Character):
+        missing_hp = player._max_hp - player._current_hp
+        healthbar = f"[{"♥" * player._current_hp}{"♡" * missing_hp}] {player._current_hp}/{player._max_hp}hp"
+        return healthbar
 
     def choose_attack(self, player: Character):
         console.print(f"{player.get_name()}'s turn.", style="bold", justify="center")
@@ -87,15 +100,39 @@ class Game:
         self._player1.attack(self._player2, attack_choice_p1)
         print("\n")
         if not self._player2.is_alive():
-            print(f"{self._player1.get_name()} wins!")
+            self.display_victory_animation(self._player1.get_name())
             return
 
         # Player 2's turn
         attack_choice_p2 = self.choose_attack(self._player2)
         self._player2.attack(self._player1, attack_choice_p2)
         if not self._player1.is_alive():
-            print(f"{self._player2.get_name()} wins!")
+            self.display_victory_animation(self._player2.get_name())
             return
+
+    def display_victory_animation(self, player_name):
+        console.clear()
+
+        colors = ["green", "yellow", "red", "blue", "magenta"]
+        
+        # Animation de texte coloré
+        for i in range(1, 5):
+            for color in ["green", "yellow", "red", "blue"]:
+                message = f"[{color}][bold]{player_name}[/bold] a remporté la victoire ![/]"
+                console.print(message, style=color, justify="center")
+                console.print()
+                console.print()
+                console.print(f"[info][{colors[i]}]Bravo ![/][/info]", justify="center")
+                console.print()
+                console.print()
+                console.print("[bold]Rejouer : Appuyez sur une touche...[/bold]", style="info", justify="center")
+                sleep(0.5)
+                
+                # Attendre une courte période pour créer l'effet d'animation
+                console.show_cursor(False)
+                console.clear()
+        
+        console.show_cursor(True)
 
     def run_game(self):
         console.clear()
