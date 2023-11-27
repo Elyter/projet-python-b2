@@ -36,7 +36,7 @@ class Game:
         console.clear()
 
         if choice == "1":
-            return Warrior(name, 2, 8, 3, Dice(6))
+            return Warrior(name, 20, 8, 3, Dice(6))
         elif choice == "2":
             return Mage(name, 20, 8, 3, Dice(6))
         elif choice == "3":
@@ -56,21 +56,26 @@ class Game:
         console.print("Current Status", style="bold", justify="center")
         console.print("---------------", style="bold", justify="center")
         console.print(f"{self._player1.get_name()}:")
-        console.print(self.show_healthbar(self._player1))
+        self.show_healthbar(self._player1)
         console.print("\n")
         console.print(f"{self._player2.get_name()}:")
-        console.print(self.show_healthbar(self._player2))
+        self.show_healthbar(self._player2)
 
     def show_healthbar(self, player: Character):
         missing_hp = player._max_hp - player._current_hp
-        healthbar = f"[{"♥" * player._current_hp}{"♡" * missing_hp}] {player._current_hp}/{player._max_hp}hp"
-        return healthbar
+        console.print(f"[{' ' * player._current_hp}]", end="\r")
+        for i in range(1, player._current_hp + 1):
+            healthbar = f"[{'♥' * i}{'♡' * missing_hp}] {i}/{player._max_hp}hp"
+            console.print(healthbar, style="bold red"  ,end="\r")
+            sleep(0.025)
+        console.print("\n")
+        console.print(f" ({player._get_potions()} potions)", style="green")
 
     def choose_attack(self, player: Character):
         console.print(f"{player.get_name()}'s turn.", style="bold", justify="center")
-        console.print("1. Basic Attack")
-        console.print("2. Critical Strike (with risk)")
-        console.print("3. Use Potion")
+        console.print("[bold bright_red]1.[/] Basic Attack", style="blue")
+        console.print("[bold bright_red]2.[/] Critical Strike (with risk)", style="orange1")
+        console.print("[bold bright_red]3.[/] Use Potion \n", style="green")
 
         choice = input("Enter the number of your choice: ")
         if choice == "3" and player._get_potions() == 0:
@@ -79,11 +84,11 @@ class Game:
 
         while choice not in ["1", "2", "3"]:
             console.clear()
-            console.print("Invalid choice. .")
+            console.print("Invalid choice. .\n", style="bold red", justify="center")
             console.print(f"{player.get_name()}'s turn.", style="bold", justify="center")
-            console.print("1. Basic Attack")
-            console.print("2. Critical Strike (with risk)")
-            console.print("3. Use Potion")
+            console.print("[bold bright_red]1.[/] Basic Attack", style="blue")
+            console.print("[bold bright_red]2.[/] Critical Strike (with risk)", style="orange1")
+            console.print("[bold bright_red]3.[/] Use Potion \n", style="green")
             choice = input("Enter the number of your choice: ")
 
         if choice == "1":
@@ -98,6 +103,7 @@ class Game:
         attack_choice_p1 = self.choose_attack(self._player1)
         print("\n")
         self._player1.attack(self._player2, attack_choice_p1)
+        self.show_healthbar(self._player2)
         print("\n")
         if not self._player2.is_alive():
             self.display_victory_animation(self._player1.get_name())
@@ -106,6 +112,7 @@ class Game:
         # Player 2's turn
         attack_choice_p2 = self.choose_attack(self._player2)
         self._player2.attack(self._player1, attack_choice_p2)
+        self.show_healthbar(self._player1)
         if not self._player1.is_alive():
             self.display_victory_animation(self._player2.get_name())
             return
